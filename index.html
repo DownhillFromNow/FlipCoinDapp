@@ -24,22 +24,25 @@
         <p class="lead">Flip a coin! </p>
       </div>
     </div>
-    <button type="button" id="#deposit-button">Deposit 1 ETH to play!</button><br>
+    <h3 id="result-output"></h3>
+    User Balance:<span id="user-balance-output"></span><br>
+    Contract Balance:<span id="contract-balance-output"></span><br>
+    <button type="button" id="deposit-button">Deposit 1 ETH to play!</button><br>
 
-    <input type="text" id="#bet-box" placeholder="Enter your bet amount"><br>
+    <input type="number" id="bet-box" placeholder="Enter your bet amount"><br>
 
-    <select id="#dropdown">
-      <option>Heads</option>
-      <option>Tails</option>
-    </select>
+  
 
-    <button type="button" id="#flip-coin">Bet!</button><br>
+    <button type="button" id="flip-coin-heads">Bet Heads!</button><br>
+    <button type="button" id="flip-coin-tails">BetTails!</button><br>
 
-    Result:<span id="#play-output"></span><br>
+    Result:<span id="play-output"></span><br>
 
-    <button type="button" id="#withdraw">Withdraw your winnings!</button><br>
+    <input type="number" id="amt-box" placeholder="Enter how much you would like to withdraw"><br>
 
-    Amount Withdrawn:<span id="#withdraw-output"></span>
+    <button type="button" id="withdraw">Withdraw your winnings!</button><br>
+
+    Winnings: <span id="myBalance_output"></span>
   
 </body>
 </html>
