@@ -2,13 +2,10 @@ pragma solidity 0.5.12;
 
 contract Main{
 
-address payable user;
 uint public balance;
 
 mapping(address => uint) public availableBalances;
-
-event moneyAdded(address player, bool added);
-event coinFlip(address caller, uint256 amount, bool win);
+mapping(address => bool) public lastFlip;
 
 
   modifier costs(uint cost){
@@ -18,36 +15,44 @@ event coinFlip(address caller, uint256 amount, bool win);
 
 
 function addBalance()public payable costs(1 ether){
-    bool add = true;
-    availableBalances[msg.sender] = msg.value;
-    emit moneyAdded(msg.sender, add);
-
+    availableBalances[msg.sender] += msg.value;
 }
 
 
 function flip(uint betType) public payable returns (bool) {
     require(betType == 1 || betType == 0, "Bet must be heads or tails!"); //Heads will be 0 and Tails will be 1
     require(msg.value <= availableBalances[msg.sender], "You can only bet as much as your balance, deposit more please!");
-    bool winner;
 
     if((now % 2 == 0 && betType == 0) || (now % 2 == 1 && betType == 1)){
         availableBalances[msg.sender] += msg.value;
         balance -= msg.value;
-        winner = true;
+        lastFlip[msg.sender] = true;
+        return lastFlip[msg.sender];
     }else{
         availableBalances[msg.sender] -= msg.value;
         balance += msg.value;
-        winner = false;
+        lastFlip[msg.sender] = false;
+        return lastFlip[msg.sender];
     }
-
-    emit coinFlip(msg.sender, msg.value, winner); 
-    return winner; 
 }
 
-function withdraw(uint amt) public {
-    require(amt <= availableBalances[msg.sender], "Not enough");
+function getLastFlip(address user) public view returns(bool){
+    return lastFlip[user];
+}
+
+function getContractBalance()public view returns(uint){
+    return balance;
+}
+
+function getUserBalance(address user1)public view returns(uint){
+    return availableBalances[user1];
+}
+
+function withdrawAll() public returns(uint) {
+    uint transfer1 = availableBalances[msg.sender];
     availableBalances[msg.sender] = 0;
-    msg.sender.transfer(amt);
+    msg.sender.transfer(transfer1);
+    return transfer1;
 }
 
 }
