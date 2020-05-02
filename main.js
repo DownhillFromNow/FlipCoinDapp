@@ -3,10 +3,10 @@ var contractInstance;
 var playerAccount = "";
 var withdrawAmt = 0;
 
-$(document).ready(function() {
-    window.ethereum.enable().then(function(accounts){
+$(document).ready(async function() {
+   await window.ethereum.enable().then(function(accounts){
         playerAccount = accounts[0];
-        contractInstance = new web3.eth.Contract(window.abi, "0xe1522190f5dA30BA4a0aB1CbA8dc8d754F15a619", {from:playerAccount}); //abi is found in the People.json file
+        contractInstance = new web3.eth.Contract(window.abi, "0x8F85436E9BC2522cF71cd8b2d669439A4b96F861", {from:playerAccount}); //abi is found in the People.json file
         console.log(contractInstance);
     });
 
@@ -17,6 +17,9 @@ $(document).ready(function() {
     $("#withdraw").click(getWinnings);
 
     //click handler, executes the function in bracets
+    
+    getUserBalance();
+    getContractBalance();
     
 });
 
@@ -95,17 +98,19 @@ function getWinnings(){
 
 
 
-function displayInfo(res){
-    $("#user-balance-output").text(Web3.utils.fromWei(res, 'ether'));
-}
+//function displayInfo(res){
+    //$("#user-balance-output").text(Web3.utils.fromWei(res, 'ether'));
+//}
 
 function getOutput(){
     contractInstance.methods.getLastFlip(playerAccount).call().then(function(result){
         console.log(result);
         if(result){
             $("#result-output").html("You Won, Congrats!");
+            $("#play-output").html(result);
         }else{
             $("#result-output").html("You Lost, Better Luck Next Time!");
+            $("#play-output").html(result);
         }
     });
 }
